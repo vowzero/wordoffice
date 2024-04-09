@@ -173,6 +173,16 @@ class StylesPart(Styles, NodePart):
 	def to_xml(self):
 		res = xml_header + super().to_xml()
 		return res
+	
+	def character(self, styleId, **kwargs):
+		style = Style.Character(styleId, **kwargs)
+		self.append(style)
+		return style
+	
+	def paragraph(self, styleId, **kwargs):
+		style = Style.Paragraph(styleId, **kwargs)
+		self.append(style)
+		return style
 
 
 _builtin_lsds = [{"name": "Normal", "uiPriority": "0", "qFormat": "1"},

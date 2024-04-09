@@ -194,7 +194,7 @@ class Text(OoxmlNode):
 	enum = _TextSpace
 	space = AttrField("xml:space", ("enum", {"enums": enum}))
 	
-	def __init__(self, text: str = None, *args, **kwargs):
+	def __init__(self, text: str = None , *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.innerText = text
 
@@ -328,12 +328,15 @@ class Run(OoxmlNode):
 			  
 			  )
 	
-	def __init__(self, text: str | Text | Iterable[Text | str] = None, rPr=None):
+	def __init__(self, content: str | OoxmlNode = None, rPr=None):
 		if isinstance(rPr, str):
 			rPr = {'style': rPr}
 		super().__init__(rPr=rPr)
-		if text is not None:
-			self.add_text(text)
+		if content is not None:
+			if isinstance(content, Drawing):
+				self.append(content)
+			else:
+				self.add_text(content)
 	
 	def add_text(self, _text: Text | str | Iterable):
 		if isinstance(_text, Text):

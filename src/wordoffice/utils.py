@@ -21,8 +21,8 @@ def right_round(num, keep_n=0):
 	return Decimal(num).quantize((Decimal('0.' + '0' * keep_n)), rounding=ROUND_HALF_UP)
 
 
-def cn_font(name):
-	return {'ascii': name, 'eastAsia': name, 'hAnsi': name, 'hint': 'eastAsia'}
+def cn_font(name, ascii='Times New Roman'):
+	return {'ascii': ascii, 'eastAsia': name, 'hAnsi': ascii, 'hint': 'eastAsia'}
 
 
 cn_fontSize = MappingProxyType({

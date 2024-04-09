@@ -1,11 +1,12 @@
-from typing import Iterable
+from typing import Iterable, Optional
 
-from core.node import OoxmlNode
-from core.type import *
-from .enums import *
-from .run import Run
-from .section import SectionPr
-from .utils import SimpleValNode, EmptyHiddenNode, SwitchNode
+from wordoffice.core.node import OoxmlNode
+from wordoffice.core.type import *
+from wordoffice.ooxml.enums import *
+from wordoffice.ooxml.run import Run
+from wordoffice.ooxml.section import SectionPr
+from wordoffice.ooxml.utils import SimpleValNode, EmptyHiddenNode, SwitchNode
+from wordoffice.common import Measure
 
 
 class Jc(SimpleValNode):
@@ -26,6 +27,10 @@ class Indent(OoxmlNode):
 	hangingChars: int
 	firstLine: Measure | str | int | float
 	firstLineChars: int
+	left : Measure | str | int | float
+	leftChars: int
+	right : Measure | str | int | float
+	rightChars : int
 
 
 class MirrorIndents(SwitchNode): ...
@@ -133,7 +138,7 @@ class ParagraphPr(EmptyHiddenNode):
 class Paragraph(OoxmlNode):
 	pPr: ParagraphPr
 	
-	def __init__(self, runs: Optional[str | Run | Iterable[Run | str]], pPr: ParagraphPr | dict | str = None):
+	def __init__(self, runs: Optional[str | Run | Iterable[Run | str]] = None, pPr: ParagraphPr | dict | str = None):
 		"""
 		12323213
 		"""

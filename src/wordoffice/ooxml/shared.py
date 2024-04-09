@@ -21,10 +21,11 @@ class BlockLevelElements(OoxmlNode):
 			self.append(Paragraph(_p))
 		elif isinstance(_p, Iterable):
 			for p in _p:
-				if isinstance(p, Paragraph):
-					self.append(p)
-				else:
+				if isinstance(p, str | Run):
 					self.append(Paragraph(p))
+				else:
+					self.append(p)
+		
 		else:
 			raise TypeError(f"Unsupported type: {type(_p)}")
 		return self

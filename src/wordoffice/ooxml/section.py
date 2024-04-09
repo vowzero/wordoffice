@@ -4,7 +4,7 @@ from wordoffice.core.opc import NodePart, OPC_BUILTIN_MAP, PartBase
 from wordoffice.core.type import *
 from .enums import *
 from .shared import HeaderFooter, BlockLevelElements
-from .utils import create_switch_node
+from .utils import create_switch_node, SimpleValNode
 
 
 class HeaderReference(OoxmlNode):
@@ -75,9 +75,9 @@ class Cols(OoxmlNode):
 class DocGrid(OoxmlNode):
 	tag = "w:docGrid"
 	enum = ST_DocGrid
-	type = AttrField('w:type', ('enum', {'enums': enum}), required=True)
-	linePitch = AttrField('w:linePitch', 'integer', required=True)
-	charSpace = AttrField('w:charSpace', 'integer', required=True)
+	type = AttrField('w:type', ('enum', {'enums': enum}))
+	linePitch = AttrField('w:linePitch', 'integer')
+	charSpace = AttrField('w:charSpace', 'integer')
 
 
 Bidi = create_switch_node('Bidi', 'w:bidi', False)
@@ -106,19 +106,19 @@ class PgNumType(OoxmlNode):
 RtlGutter = create_switch_node('RtlGutter', 'w:rtlGutter', False)
 
 
-class TextDirection(OoxmlNode):
+class TextDirection(SimpleValNode):
 	tag = 'w:textDirection'
 	enum = ST_TextDirection
 	val = AttrField('w:val', ('enum', {'enums': enum}), required=True)
 
 
-class SectionType(OoxmlNode):
+class SectionType(SimpleValNode):
 	tag = 'w:type'
 	enum = ST_SectionMark
 	val = AttrField('w:val', ('enum', {'enums': enum}), required=True)
 
 
-class VAlign(OoxmlNode):
+class VAlign(SimpleValNode):
 	tag = 'w:vAlign'
 	enum = ST_VerticalJc
 	val = AttrField('w:val', ('enum', {'enums': enum}), required=True)
@@ -128,17 +128,17 @@ class SectionPr(OoxmlNode):
 	tag = "w:sectPr"
 	# headerReference = OoxmlSubField(HeaderReference,property=False)
 	# footerReference = OoxmlSubField(FooterReference,property=False)
+	type = SubField(SectionType,index=3)
+	pageSize = SubField(PageSize,index=4)
+	pageMargin = SubField(PageMargin,index=5)
 	bidi = SubField(Bidi)
-	cols = SubField(Cols)
-	docGrid = SubField(DocGrid)
+	cols = SubField(Cols,index=6)
+	docGrid = SubField(DocGrid,index=100)
 	formProt = SubField(FormProt)
 	lnNumType = SubField(LnNumType)
-	pageMargin = SubField(PageMargin)
 	pgNumType = SubField(PgNumType)
-	pageSize = SubField(PageSize)
 	rtlGutter = SubField(RtlGutter)
 	textDirection = SubField(TextDirection)
-	type = SubField(SectionType)
 	vAlign = SubField(VAlign)
 	
 	def __init__(self, *args, **kwargs):

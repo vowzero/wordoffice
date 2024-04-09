@@ -286,6 +286,10 @@ class Extent(OoxmlNode):
 	cy = AttrField('cy', OoxmlEmusMeasure, required=True)
 
 
+class EffectExtent(OoxmlNode):
+	tag = 'wp:extentExtent'
+
+
 class DrawingInline(OoxmlNode):
 	tag = 'wp:inline'
 	
@@ -295,7 +299,7 @@ class DrawingInline(OoxmlNode):
 	distR = AttrField('distR', OoxmlEmusMeasure, default=MeasureZero)
 	
 	extent = SubField(Extent, index=1)
-	# effectExtent = OoxmlSubField(EffectExtent)
+	effectExtent = SubField(EffectExtent, index=2)
 	docPr = SubField(DocPr, index=3)
 	graphic: Graphic = SubField(Graphic, index=4)
 

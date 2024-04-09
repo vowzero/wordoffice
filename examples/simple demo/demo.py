@@ -1,7 +1,7 @@
 from wordoffice.common import Measure
 from wordoffice.docx.document import Docx
-from wordoffice.docx.image import Image, ImageJpegPart, ImageInline, ImageAnchor
-from wordoffice.ooxml.dml import PositionH, PositionV
+from wordoffice.docx.image import Image, ImagePart, ImageInline, ImageAnchor
+
 from wordoffice.ooxml.paragraph import Paragraph
 from wordoffice.ooxml.run import Run
 from wordoffice.ooxml.section import Header, HeaderReference
@@ -19,16 +19,17 @@ docx.add_p(paragraph)
 
 # Use style
 style_normal_c = {'fonts': cn_font('SimSun'), 'fontSize': Measure.PT(12), 'bold': False}
-style_color_c = {'fonts': cn_font('SimSun'), 'fontSize': Measure.PT(24), 'bold': False}
+style_color_c = {'fonts': cn_font('SimSun'), 'fontSize': Measure.PT(24), 'bold': False, 'color': 'FF0000'}
 style_center_p = {'jc': 'center'}
 
 # Use style: add default style and custom style
 styles = StylesBuiltinPart()
 styles.docDefaults.rPrDefault = {'rPr': style_normal_c}
 
-styles.append(Style.Character('normal_c', rPr=style_normal_c))
-styles.append(Style.Character('color_c', rPr=style_color_c))
-styles.append(Style.Paragraph('center_p', pPr=style_center_p))
+styles.character('normal_c', rPr=style_normal_c)
+styles.character('color_c', rPr=style_color_c)
+styles.paragraph('center_p', pPr=style_center_p)
+
 # Use Style: add style to paragraph and run
 docx.add_p(Run('Hello, Normal!', 'normal_c'))
 docx.add_p(Run('Hello, Color!', 'color_c'))
@@ -56,7 +57,7 @@ docx.lastSection.sectPr.setHeaderReference(headerRef)
 headerPart.add_p('this is Header')
 
 # Image
-imagePart = ImageJpegPart('./test.jpg', word=docx)
+imagePart = ImagePart('./test.jpg', word=docx)
 
 image_inline = ImageInline(imagePart)
 image_inline.size = (Measure.PX(300), Measure.PX(150))
@@ -78,5 +79,6 @@ run_image_anchor = Run()
 run_image_anchor.add_image(image_anchor)
 docx.add_p(['anchor, the top image', run_image_anchor])
 
+docx.set_template('styles', styles)
 # Save to file
 docx.save('hello.docx')

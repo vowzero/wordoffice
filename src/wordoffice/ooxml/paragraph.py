@@ -26,6 +26,10 @@ class Indent(OoxmlNode):
 	startChars = AttrField('w:startChars', 'integer')
 	end = AttrField('w:end', OoxmlSignedTwipsMeasure)
 	endChars = AttrField('w:endChars', 'integer')
+	left = AttrField('w:left', OoxmlSignedTwipsMeasure)
+	leftChars = AttrField('w:leftChars', 'integer')
+	right = AttrField('w:right', OoxmlSignedTwipsMeasure)
+	rightChars = AttrField('w:rightChars', 'integer')
 	hanging = AttrField('w:hanging', OoxmlTwipsMeasure)
 	hangingChars = AttrField('w:hangingChars', 'integer')
 	firstLine = AttrField('w:firstLine', OoxmlTwipsMeasure)
@@ -44,7 +48,7 @@ class SpacingPara(OoxmlNode):
 	beforeLines = AttrField('w:beforeLines', 'integer', default='0')
 	beforeAutospacing = AttrField('w:beforeAutospacing', 'ooxml_boolean', default=False)
 	after = AttrField('w:after', OoxmlTwipsMeasure, default='0')
-	afterLines = AttrField('w:afterLines', 'integer', default='0')
+	afterLines = AttrField('w:afterLines', 'integer')
 	afterAutospacing = AttrField('w:afterAutospacing', 'ooxml_boolean', default=False)
 	line = AttrField('w:line', OoxmlSignedTwipsMeasure, default='0')
 	lineRule = AttrField('w:lineRule', ('enum', {'enums': enum}), default=enum.AUTO)
@@ -111,7 +115,7 @@ class Paragraph(OoxmlNode):
 	
 	pPr = SubField(ParagraphPr)
 	
-	def __init__(self, runs: Optional[str | Run | Iterable[Run | str]]=None, pPr: ParagraphPr | dict | str = None):
+	def __init__(self, runs: Optional[str | Run | Iterable[Run | str]] = None, pPr: ParagraphPr | dict | str = None):
 		if isinstance(pPr, str):
 			pPr = {'style': pPr}
 		super().__init__(pPr=pPr)
@@ -141,3 +145,5 @@ class Paragraph(OoxmlNode):
 		self.isPlaceholder = True
 		if self.pPr is None:
 			self.pPr = ParagraphPr(sectPr=sectPr)
+		else:
+			self.pPr.sectPr = sectPr

@@ -8,11 +8,18 @@ from wordoffice.ooxml.dml import *
 image_count_id = 1
 
 
-class ImageJpegPart(FilePart):
-	opc_info = ("media/image{}.jpeg", ('jpeg', 'image/jpeg'), RelationshipTypeEnum.MEDIA_IMAGE)
+class ImagePart(FilePart):
+	opc_infos = {
+		'jpeg': ('media/image{}.jpeg', 'image/jpeg', RelationshipTypeEnum.MEDIA_IMAGE),
+		'jpg': ('media/image{}.jpeg', 'image/jpeg', RelationshipTypeEnum.MEDIA_IMAGE),
+		'png' : ('media/image{}.png', 'image/png', RelationshipTypeEnum.MEDIA_IMAGE),
+	}
 	
 	def __init__(self, filename, word: Docx = None):
-		super().__init__(filename, self.opc_info)
+		ext = filename.split('.')[-1]
+		if ext not in self.opc_infos:
+			raise ValueError(f"Unsupported image type: {ext}")
+		super().__init__(filename, self.opc_infos[ext])
 		
 		image = PILImage.open(filename)
 		self.size = image.size
